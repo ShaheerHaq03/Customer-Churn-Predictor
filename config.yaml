@@ -1,0 +1,120 @@
+# Configuration file for Customer Churn Prediction Project
+
+# Data Configuration
+data:
+  raw_data_path: "data/raw/"
+  processed_data_path: "data/processed/"
+  external_data_path: "data/external/"
+  raw_filename: "Bank Customer Churn Prediction.csv"
+  train_file: "train_data.csv"
+  test_file: "test_data.csv"
+  sample_size: 10000  # Number of samples to generate
+
+# Feature Engineering
+features:
+  categorical_columns:
+    - Geography
+    - Gender
+    - HasCrCard
+    - IsActiveMember
+  
+  numerical_columns:
+    - CreditScore
+    - Age
+    - Tenure
+    - Balance
+    - NumOfProducts
+    - EstimatedSalary
+  
+  target_column: "Exited"
+  
+  # Feature engineering parameters
+  encoding_method: "onehot"  # "label" or "onehot"
+  scaling_method: "standard"  # "standard" or "minmax"
+  feature_selection_threshold: 0.01
+
+# Model Configuration
+models:
+  # Class imbalance handling
+  use_smote: true
+  smote_sampling_strategy: "auto"
+  
+  # Model parameters
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  
+  # Algorithm-specific parameters
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+    class_weight: "balanced"
+  
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 2
+    min_samples_leaf: 1
+    class_weight: "balanced"
+  
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 1
+    
+  svm:
+    C: 1.0
+    kernel: "rbf"
+    gamma: "scale"
+    class_weight: "balanced"
+
+# Evaluation Configuration
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "roc_auc"
+  
+  # Threshold optimization
+  optimize_threshold: true
+  threshold_range: [0.1, 0.9]
+  threshold_step: 0.05
+
+# Web Application
+webapp:
+  host: "0.0.0.0"
+  port: 8501
+  debug: false
+  theme:
+    primaryColor: "#FF6B6B"
+    backgroundColor: "#FFFFFF"
+    secondaryBackgroundColor: "#F0F2F6"
+    textColor: "#262730"
+
+# Output Configuration
+output:
+  models_path: "models/"
+  reports_path: "reports/"
+  plots_path: "reports/figures/"
+  
+  # Model persistence
+  save_models: true
+  model_format: "joblib"  # "joblib" or "pickle"
+  
+  # Report generation
+  generate_reports: true
+  report_format: "html"  # "html" or "pdf"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/app.log"
+
+# Auto mode enables dataset discovery and schema inference for zero-config runs
+auto_mode: true
